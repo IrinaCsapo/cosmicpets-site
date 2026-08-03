@@ -1,19 +1,18 @@
 name: Deploy to GitHub Pages
 
-# Manual only, because the site has not launched yet and Pages is switched off.
-# Leaving the push trigger on would make every commit fail with a red X.
+# Deploys on every push to main, and on demand from the Actions tab.
 #
-# TO GO LIVE:
-#   1. Settings > Pages > Source: GitHub Actions.
-#      (Needs a public repo on GitHub Free. Private repos need GitHub Pro.)
-#   2. Uncomment the push trigger below so every commit deploys.
-#   3. Rename CNAME.disabled to CNAME once the DNS records point at GitHub.
+# configure-pages runs with `enablement: true`, so the first run switches Pages
+# on by itself. There is no need to visit Settings > Pages first.
 #
-# on:
-#   push:
-#     branches: [main]
+# REMAINING LAUNCH STEP: rename CNAME.disabled to CNAME once the DNS records in
+# the README point at GitHub. Until then the site lives at
+# https://irinacsapo.github.io/cosmicpets-site/ and cosmicpets.co.uk is
+# untouched.
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -34,6 +33,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
