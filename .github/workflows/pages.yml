@@ -2,8 +2,13 @@ name: Deploy to GitHub Pages
 
 # Deploys on every push to main, and on demand from the Actions tab.
 #
-# configure-pages runs with `enablement: true`, so the first run switches Pages
-# on by itself. There is no need to visit Settings > Pages first.
+# ONE-TIME SETUP, required before the first run can succeed:
+#   Settings > Pages > Source: GitHub Actions
+#
+# This cannot be automated. configure-pages accepts `enablement: true`, which
+# is meant to create the Pages site over the API, but the workflow's GITHUB_TOKEN
+# is refused: "Create Pages site failed. Resource not accessible by integration".
+# So the dropdown has to be set by hand, once.
 #
 # REMAINING LAUNCH STEP: rename CNAME.disabled to CNAME once the DNS records in
 # the README point at GitHub. Until then the site lives at
@@ -33,8 +38,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
