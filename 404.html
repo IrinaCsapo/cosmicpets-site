@@ -7,63 +7,97 @@
 <meta name="description" content="This page drifted off into the void. Head back to Cosmic Pets.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#ff337c">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
 
-<link rel="icon" href="/assets/img/favicon.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Asar&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/site.css">
-<script>document.documentElement.classList.add('js');</script>
-
+<!--
+  Deliberately self-contained: styles inline, links relative, no stylesheet
+  request. GitHub Pages serves this file for any missing path, including from a
+  project sub-path like /cosmicpets-site/, where a root-absolute
+  /assets/css/site.css 404s and leaves the page unstyled. These rules duplicate
+  site.css on purpose. It is one small page that must never depend on another
+  file resolving.
+-->
+<style>
+  @font-face {
+    font-family: 'Aventi';
+    src: url('assets/fonts/Aventi-Bold.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  :root {
+    --ink: oklch(18.1% 0.115 273.4);
+    --body: oklch(54.8% 0.056 288.2);
+    --pink: oklch(66.2% 0.238 6.1);
+    --line: oklch(93.5% 0.012 288);
+    color-scheme: light;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100dvh;
+    display: grid; place-items: center;
+    padding: clamp(24px, 6vw, 72px);
+    text-align: center;
+    background:
+      radial-gradient(90% 120% at 12% 8%, oklch(96% 0.04 6 / 0.95), transparent 60%),
+      radial-gradient(90% 120% at 92% 24%, oklch(95% 0.045 292 / 0.95), transparent 62%),
+      oklch(97.2% 0.012 292);
+    color: var(--body);
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: 17px; line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 44rem; }
+  .eyebrow {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--pink); margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Aventi', Georgia, serif; font-weight: 700;
+    font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1.06;
+    letter-spacing: -0.015em; color: var(--ink); text-wrap: balance;
+  }
+  h1 em { font-family: Georgia, serif; font-style: normal; color: var(--pink); }
+  hr {
+    width: 62px; height: 3px; border: 0; border-radius: 3px;
+    background: var(--pink); margin: 22px auto;
+  }
+  p.lede { font-size: clamp(1.05rem, 1.55vw, 1.2rem); text-wrap: pretty; }
+  .btn-row {
+    display: flex; flex-wrap: wrap; gap: 14px; justify-content: center;
+    margin-top: 34px;
+  }
+  a.btn {
+    display: inline-flex; align-items: center;
+    font-size: 0.98rem; font-weight: 600; line-height: 1; text-decoration: none;
+    padding: 17px 32px; border-radius: 999px; border: 2px solid transparent;
+    transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s,
+                border-color .28s, color .28s;
+  }
+  a.btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    background: var(--pink); color: oklch(100% 0 0);
+    box-shadow: 0 8px 22px oklch(66% 0.238 6 / 0.32);
+  }
+  .btn-primary:hover { box-shadow: 0 14px 32px oklch(66% 0.238 6 / 0.42); }
+  .btn-ghost { color: var(--ink); border-color: var(--line); background: transparent; }
+  .btn-ghost:hover { border-color: var(--pink); color: var(--pink); }
+  a:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: 0.01ms !important; }
+  }
+</style>
 </head>
 <body>
 
-<header class="nav">
-  <div class="shell nav-inner">
-    <a class="brand" href="/">
-      <img src="/assets/img/logo-vertical.svg" alt="" width="40" height="40">
-      <span>Cosmic Pets</span>
-    </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="/index.html">Home</a></li>
-      <li><a href="/gallery.html">Gallery</a></li>
-      <li><a href="/prices.html">Prices</a></li>
-      <li><a href="/photo-guide.html">Photo Guide</a></li>
-      <li><a href="/about.html">About</a></li>
-      <li><a href="/faqs.html">FAQs</a></li>
-      <li><a href="/contact.html">Contact</a></li>
-      <li class="nav-cta"><a class="btn btn-primary btn-sm" href="/contact.html">Order Now</a></li>
-    </ul>
+<main>
+  <p class="eyebrow">404</p>
+  <h1>This page went <em>off exploring</em></h1>
+  <hr>
+  <p class="lede">Whatever you were looking for has drifted somewhere else in the galaxy. Try the gallery, or just tell me what you were after.</p>
+  <div class="btn-row">
+    <a class="btn btn-primary" href="gallery.html">See the Cosmic Crew</a>
+    <a class="btn btn-ghost" href="index.html">Back to the start</a>
   </div>
-</header>
-
-<main id="main">
-  <section class="band cta-band">
-    <div class="shell shell-narrow center">
-      <p class="eyebrow">404</p>
-      <h1>This page went <span class="pink serif-em">off exploring</span></h1>
-      <hr class="rule">
-      <p class="lede">Whatever you were looking for has drifted somewhere else in the galaxy. Try the gallery, or just tell me what you were after.</p>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="/gallery.html">See the Cosmic Crew</a>
-        <a class="btn btn-ghost" href="/index.html">Back to the start</a>
-      </div>
-    </div>
-  </section>
 </main>
 
-<footer class="footer">
-  <div class="shell">
-    <div class="footer-base">
-      <span>&copy; <span data-year>2026</span> Cosmic Pets. All rights reserved.</span>
-      <span>Design &amp; build by <a href="https://irina.love">Irina Csapo</a></span>
-    </div>
-  </div>
-</footer>
-
-<script src="/assets/js/site.js" defer></script>
 </body>
 </html>
