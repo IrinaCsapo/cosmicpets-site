@@ -1,7 +1,6 @@
 # Cosmic Pets
 
-The cosmicpets.co.uk website, rebuilt by hand to replace the Webflow site
-(£29/month) with plain HTML, CSS and one small JS file. Ready for GitHub Pages,
+The cosmicpets.co.uk website, rebuilt to replace the Webflow site with plain HTML, CSS and one small JS file. Ready for GitHub Pages,
 not deployed yet. See "Go live" below.
 
 **No build step.** Edit the HTML directly, commit, push.
