@@ -5,6 +5,27 @@ not deployed yet. See "Go live" below.
 
 **No build step.** Edit the HTML directly, commit, push.
 
+Live preview: <https://irinacsapo.github.io/cosmicpets-site/>
+The custom domain is still on Webflow until the DNS records below are changed.
+
+## Deadline: Monday 10 August 2026
+
+Do not leave the DNS switch until the 10th. Changing a record is instant, but
+the world seeing the change is not, and GitHub only issues the HTTPS
+certificate after the domain already resolves to it. Budget 24 to 48 hours.
+
+| When | What |
+|------|------|
+| Mon 3 to Thu 6 Aug | Tweaks. Push to `main`, each push redeploys the preview. |
+| **Fri 7 Aug** | **Switch the DNS.** Two records, see section 3. |
+| Fri 7 to Sat 8 Aug | Propagation, then tick Enforce HTTPS once the cert appears. |
+| Sun 9 Aug | Test: every page, a real email to hello@cosmicpets.co.uk, one form submission. |
+| Mon 10 Aug | Live. Cancel Webflow only once everything above passed. |
+
+Switching on the Friday leaves the whole weekend as buffer. Switching on the
+Monday leaves none, and if something needs fixing you would be fixing it on
+the deadline itself.
+
 ## Structure
 
 ```
