@@ -388,21 +388,44 @@ p + p { margin-top: 1.05em; }
   to   { transform: translate3d(-50%, 0, 0); }
 }
 
+/* .marquee-item is the flex slot. It carries NO transform of its own, so its
+   on-screen box stays a stable thing to measure. The visible card inside it is
+   what tilts. Keeping the two separate is what stops the curve from feeding
+   back into its own measurement and juddering. */
 .marquee-item {
   flex: 0 0 auto;
   width: clamp(148px, 17vw, 228px);
-  border: 0; padding: 0; background: none; cursor: zoom-in;
-  border-radius: var(--radius); overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+  display: block; cursor: pointer;
 }
-.marquee-item img {
+.marquee-card {
+  display: block; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow .4s var(--ease);
+}
+.marquee-card img {
   width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover; display: block;
 }
-.marquee-item:hover { transform: translateY(-6px) scale(1.015); }
 
-/* A moving strip is decoration. If the reader has asked for less motion, it
-   stops and becomes an ordinary scrollable row they drive themselves. */
+/* ── the cinema curve ──────────────────────────────────────────────────────
+   Added by JS (is-3d) so it only ever applies when the script is there to
+   drive it. The perspective lives on the frame, and every ancestor down to the
+   card preserves 3D so the per-card rotateY actually renders in depth. JS sets
+   each card's rotateY / translateZ / scale from its live horizontal position,
+   which turns the flat scroll into a panorama that curves away at both edges. */
+.marquee.is-3d { perspective: 1500px; perspective-origin: 50% 44%; }
+.marquee.is-3d .marquee-track { transform-style: preserve-3d; }
+.marquee.is-3d .marquee-item { transform-style: preserve-3d; }
+.marquee.is-3d .marquee-card {
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  box-shadow: var(--shadow-lg);
+  will-change: transform, opacity;
+}
+.marquee-item:hover .marquee-card { box-shadow: var(--shadow-lg); }
+
+/* A moving strip is decoration. If the reader has asked for less motion, the
+   curve never activates (JS bails) and this turns it into a plain, flat,
+   scrollable row they drive themselves. */
 @media (prefers-reduced-motion: reduce) {
   .marquee { overflow-x: auto; scroll-snap-type: x mandatory; }
   .marquee-track { animation: none; }

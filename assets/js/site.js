@@ -268,6 +268,76 @@
     });
   }
 
+  /* ── hero cinema carousel ─────────────────────────────────────────────────
+
+     Bends the flat marquee into a curved panorama. The horizontal travel is
+     still the CSS animation, untouched, so the seamless loop is preserved. All
+     this adds is depth: each frame it reads where every card currently sits and
+     sets that card's rotateY, push-back and scale from its distance to centre.
+     Cards near the middle face you; cards toward the edges angle away.
+
+     It measures the .marquee-item (which never transforms) and writes to the
+     .marquee-card inside it, so a card's own tilt can't pollute the reading it
+     is computed from. Under reduced motion it does nothing and the CSS leaves a
+     plain scrollable row.
+     --------------------------------------------------------------------- */
+
+  (function () {
+    if (reduced) { return; }
+    var marquee = document.querySelector('.marquee');
+    if (!marquee) { return; }
+
+    var cards = Array.prototype.map.call(
+      marquee.querySelectorAll('.marquee-item'),
+      function (el) { return { el: el, card: el.querySelector('.marquee-card') }; }
+    ).filter(function (c) { return c.card; });
+    if (!cards.length) { return; }
+
+    marquee.classList.add('is-3d');
+
+    var MAX_ROT = 40;    // degrees of turn at the edge
+    var DEPTH   = 150;   // px a card is pushed back at the edge
+    var MIN_SC  = 0.82;  // how small an edge card shrinks to
+    var FADE    = 0.26;  // how much an edge card dims
+    var SPREAD  = 1.15;  // <1 tightens the curve toward centre, >1 widens it
+
+    var raf = 0, running = false;
+
+    function frame() {
+      var r = marquee.getBoundingClientRect();
+      var mid = r.left + r.width / 2;
+      var half = (r.width / 2) * SPREAD || 1;
+
+      for (var i = 0; i < cards.length; i++) {
+        var b = cards[i].el.getBoundingClientRect();
+        var d = ((b.left + b.width / 2) - mid) / half;      // signed, ~ -1..1 on screen
+        var cl = d < -1 ? -1 : d > 1 ? 1 : d;               // clamp for rot/scale
+        var ad = cl < 0 ? -cl : cl;
+
+        var st = cards[i].card.style;
+        st.transform =
+          'translateZ(' + (-ad * DEPTH).toFixed(1) + 'px) ' +
+          'rotateY(' + (cl * MAX_ROT).toFixed(2) + 'deg) ' +
+          'scale(' + (1 - (1 - MIN_SC) * ad).toFixed(3) + ')';
+        st.opacity = (1 - FADE * ad).toFixed(3);
+        st.zIndex = String(1000 - Math.round(ad * 1000));
+      }
+      raf = requestAnimationFrame(frame);
+    }
+
+    function start() { if (!running) { running = true; raf = requestAnimationFrame(frame); } }
+    function stop() { if (running) { running = false; cancelAnimationFrame(raf); } }
+
+    // Only spend frames on it while it is actually on screen.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        if (entries[entries.length - 1].isIntersecting) { start(); } else { stop(); }
+      }, { threshold: 0 }).observe(marquee);
+    } else {
+      start();
+    }
+  })();
+
   /* ── current year ────────────────────────────────────────────────────── */
 
   var year = document.querySelector('[data-year]');
