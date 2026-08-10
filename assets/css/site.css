@@ -324,10 +324,17 @@ p + p { margin-top: 1.05em; }
 }
 .hero > * { position: relative; z-index: 1; }
 
-.hero-copy { text-align: center; }
+.hero-copy { text-align: center; container-type: inline-size; }
 .hero-copy h1 {
-  margin-bottom: 20px; margin-inline: auto; max-width: 17ch;
-  font-size: clamp(2.15rem, 7.4vw, 4rem);
+  margin-bottom: 20px;
+  /* Sized off the width of the copy column (cqi), not the raw viewport, so it
+     holds one confident line on any desktop width and does not balloon on an
+     ultrawide monitor where the column has stopped growing. As the screen
+     narrows the size follows the column down and the line reflows on its own;
+     the rem bounds stop it getting silly-big or too small. No max-width, that
+     is what was forcing the early two-line wrap. */
+  font-size: clamp(1.95rem, 7.9cqi, 3.6rem);
+  line-height: 1.04;
 }
 .hero-copy .lede { margin-inline: auto; max-width: 54ch; }
 
@@ -340,7 +347,9 @@ p + p { margin-top: 1.05em; }
    copy width, and buttons that sit on one line each. */
 @media (max-width: 560px) {
   .hero { padding-block: 28px 0; }
-  .hero-copy h1 { max-width: 13ch; line-height: 1.02; }
+  /* On a phone one line will not fit, and should not: let it wrap to two or
+     three balanced lines rather than shrink to nothing. */
+  .hero-copy h1 { max-width: 15ch; margin-inline: auto; line-height: 1.02; }
   .hero-copy .lede { font-size: 1rem; line-height: 1.55; max-width: 34ch; }
   .hero-copy .btn-row { margin-top: 26px; gap: 10px; }
   .hero-copy .btn {
