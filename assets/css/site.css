@@ -328,9 +328,13 @@ p + p { margin-top: 1.05em; }
 .hero-copy { text-align: center; }
 .hero-copy h1 {
   margin-bottom: 20px; margin-inline: auto; max-width: 17ch;
-  font-size: clamp(2.15rem, 7.4vw, 5rem);
+  font-size: clamp(2.15rem, 7.4vw, 4rem);
 }
 .hero-copy .lede { margin-inline: auto; max-width: 54ch; }
+
+/* text-align does not reach flex children, so the button row needs centring
+   in its own right. Without this it packs left inside centred copy. */
+.hero-copy .btn-row { justify-content: center; }
 
 /* On a phone the hero has to earn its height, otherwise the carousel, which is
    the actual selling point, never appears above the fold. Tighter type, tighter
