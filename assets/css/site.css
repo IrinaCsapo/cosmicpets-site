@@ -234,7 +234,7 @@ p + p { margin-top: 1.05em; }
 /* The horizontal lockup already contains the words "Cosmic Pets", so the nav
    carries no separate text. Height-constrained with width:auto, because the
    artwork is 252x67 and forcing it square squashes the mark. */
-.brand img { height: clamp(26px, 3vw, 32px); width: auto; }
+.brand img { height: clamp(30px, 2.6vw, 44px); width: auto; }
 
 .nav-links {
   display: flex; align-items: center; gap: clamp(14px, 2vw, 30px);
