@@ -166,12 +166,18 @@ p + p { margin-top: 1.05em; }
   width: 62px; height: 3px; border: 0; border-radius: 3px;
   background: var(--pink); margin: 22px 0;
 }
-.center .rule { margin-inline: auto; }
+/* The divider follows the heading. Anywhere the text is centred, the rule
+   centres with it. .center is the explicit opt-in; .page-head and .hero-copy
+   centre via text-align without that class, so they are named here too, which
+   is the bug behind the off-centre dividers under the page titles. */
+.center .rule,
+.page-head .rule,
+.hero-copy .rule { margin-inline: auto; }
 
 /* ── buttons ───────────────────────────────────────────────────────────── */
 
 .btn {
-  display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   font-family: var(--sans); font-size: 0.98rem; font-weight: 600;
   line-height: 1; text-decoration: none; cursor: pointer;
   padding: 17px 32px; border-radius: 999px; border: 2px solid transparent;
@@ -255,6 +261,19 @@ p + p { margin-top: 1.05em; }
 .nav-links a:hover::after,
 .nav-links a[aria-current='page']::after { transform: scaleX(1); }
 .nav-links a[aria-current='page'] { color: var(--pink); }
+
+/* The Order Now button is a real CTA, not a nav link. The generic .nav-links a
+   rules above are more specific than .btn-primary and were overriding it: they
+   painted its label ink-dark and gave it the link underline and pink hover.
+   These rules, placed after them, hand it back to the button styling so it
+   reads as the same white-on-pink pill as every other CTA on the site. */
+.nav-links .nav-cta a {
+  color: oklch(100% 0 0);
+  padding: 12px 26px;         /* a touch fuller than btn-sm, closer to the CTAs */
+  font-size: 0.92rem; font-weight: 600;
+}
+.nav-links .nav-cta a:hover { color: oklch(100% 0 0); }
+.nav-links .nav-cta a::after { content: none; }
 
 .nav-toggle {
   display: none; background: none; border: 0; cursor: pointer;
@@ -764,6 +783,17 @@ p + p { margin-top: 1.05em; }
 /* ── form ──────────────────────────────────────────────────────────────── */
 
 .form { display: grid; gap: 18px; margin-top: 34px; }
+
+/* A grid child stretches to the whole column by default, which is why the
+   submit button ran the full width with its label shoved to the left. Let it
+   size to its own content and sit at the start of the row instead. The label
+   centres via the justify-content on .btn. */
+.form button[type="submit"] { justify-self: start; }
+@media (max-width: 560px) {
+  /* full width on a phone is the better tap target */
+  .form button[type="submit"] { justify-self: stretch; }
+}
+
 .field { display: grid; gap: 8px; }
 .field label {
   font-size: 0.88rem; font-weight: 600; color: var(--ink);
