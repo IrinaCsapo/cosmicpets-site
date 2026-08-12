@@ -427,15 +427,29 @@ p + p { margin-top: 1.05em; }
 .marquee-item {
   flex: 0 0 auto;
   width: clamp(148px, 17vw, 228px);
-  display: block; cursor: pointer;
+  display: block; cursor: pointer; text-decoration: none;
 }
 .marquee-card {
   display: block; border-radius: var(--radius); overflow: hidden;
+  background: var(--paper);
   box-shadow: var(--shadow);
   transition: box-shadow .4s var(--ease);
 }
 .marquee-card img {
   width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover; display: block;
+}
+/* A nameplate below the art rather than over it, so it never fights the
+   "Cosmic Pets" watermark or the badge already inside each portrait. It sits
+   inside the card, so it tilts and scales with the card in the 3D curve. One
+   line, centred; the rare long names (Victor, Garrus & Nahlus) trim with an
+   ellipsis, and the full name is always on the gallery. */
+.marquee-name {
+  display: block; text-align: center;
+  font-family: var(--serif); font-size: clamp(0.82rem, 1vw, 0.95rem);
+  color: var(--ink); letter-spacing: 0.01em;
+  padding: 9px 10px 10px;
+  border-top: 1px solid var(--line);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 /* ── the cinema curve ──────────────────────────────────────────────────────
