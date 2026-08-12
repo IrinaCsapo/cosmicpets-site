@@ -204,7 +204,11 @@ p + p { margin-top: 1.05em; }
 .btn-row {
   display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px;
 }
-.center .btn-row { justify-content: center; }
+/* Centre the buttons whether .center is an ancestor of the row or sits on the
+   row element itself (class="center btn-row"). The second selector was the gap:
+   text-align does not reach flex children, so those rows were left-packing. */
+.center .btn-row,
+.btn-row.center { justify-content: center; }
 
 .text-link {
   color: var(--pink); text-decoration: none;
