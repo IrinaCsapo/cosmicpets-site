@@ -485,6 +485,17 @@ p + p { margin-top: 1.05em; }
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
 }
 
+/* The home-page taster: fewer, larger portraits in a fixed four-up grid inside
+   the wide shell, so the cards read bigger than the gallery's auto-fill and
+   land as two clean rows of four. Steps down to two-up on tablets and phones. */
+.portrait-grid--feature {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 30px);
+}
+@media (max-width: 900px) {
+  .portrait-grid--feature { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 .portrait {
   position: relative; display: block; width: 100%;
   border: 0; padding: 0; background: none; cursor: zoom-in;
