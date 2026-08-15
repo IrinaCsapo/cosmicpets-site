@@ -62,71 +62,84 @@
     }
   }
 
-  /* ── portrait lightbox ─────────────────────────────────────────────────
+  /* ── portrait story modal ──────────────────────────────────────────────
 
-     Scoped to a container so a page can hold more than one independent
-     gallery. With no [data-lightbox-group] on the page, which is the normal
-     case, the whole document is one group.
+     Click a portrait and it opens in an overlay: the artwork on the left, the
+     pet's story on the right (stacked on a phone). Content comes from the
+     #crew-stories JSON island keyed by each portrait's data-slug, so the story
+     text lives in the page markup once and every portrait that shares a slug
+     reuses it. Arrows / swipe / keyboard step through the set on the page.
      ------------------------------------------------------------------- */
 
-  var groups = document.querySelectorAll('[data-lightbox-group]');
-  Array.prototype.forEach.call(groups.length ? groups : [document], initLightbox);
+  var portraits = Array.prototype.slice.call(document.querySelectorAll('[data-portrait]'));
+  var storyNode = document.getElementById('crew-stories');
 
-  function initLightbox(root) {
-  var portraits = Array.prototype.slice.call(root.querySelectorAll('[data-portrait]'));
+  if (portraits.length && storyNode) {
+    var CREW = {};
+    try { CREW = JSON.parse(storyNode.textContent); } catch (e) { CREW = {}; }
 
-  if (portraits.length) {
     var box = document.createElement('div');
-    box.className = 'lightbox';
+    box.className = 'story-modal';
     box.setAttribute('role', 'dialog');
     box.setAttribute('aria-modal', 'true');
-    box.setAttribute('aria-label', 'Portrait viewer');
-    box.hidden = false;
+    box.setAttribute('aria-label', 'Cosmic Pet portrait and story');
     box.innerHTML =
-      '<div class="lightbox-bar">' +
-        '<div><span class="lightbox-title"></span> <span class="lightbox-count"></span></div>' +
-        '<button class="lb-btn lb-close" type="button" aria-label="Close viewer">✕</button>' +
-      '</div>' +
-      '<div class="lightbox-stage">' +
-        '<button class="lb-btn lb-nav lb-prev" type="button" aria-label="Previous portrait">‹</button>' +
-        '<img alt="">' +
-        '<button class="lb-btn lb-nav lb-next" type="button" aria-label="Next portrait">›</button>' +
-      '</div>' +
-      '<p class="lightbox-foot"></p>';
+      '<div class="sm-backdrop" data-close></div>' +
+      '<div class="sm-card" role="document">' +
+        '<button class="sm-btn sm-close" type="button" aria-label="Close">✕</button>' +
+        '<div class="sm-media"><img alt=""></div>' +
+        '<div class="sm-body">' +
+          '<p class="sm-eyebrow">The Cosmic Crew <span class="sm-count"></span></p>' +
+          '<h2 class="sm-name"></h2>' +
+          '<hr class="rule">' +
+          '<div class="sm-story"></div>' +
+          '<a class="btn btn-primary sm-cta" href="contact.html">Order a portrait like this</a>' +
+        '</div>' +
+        '<button class="sm-btn sm-nav sm-prev" type="button" aria-label="Previous">‹</button>' +
+        '<button class="sm-btn sm-nav sm-next" type="button" aria-label="Next">›</button>' +
+      '</div>';
     document.body.appendChild(box);
 
-    var lbImg = box.querySelector('img');
-    var lbTitle = box.querySelector('.lightbox-title');
-    var lbCount = box.querySelector('.lightbox-count');
-    var lbFoot = box.querySelector('.lightbox-foot');
-    var index = 0;
-    var lastFocus = null;
+    var mImg   = box.querySelector('.sm-media img');
+    var mName  = box.querySelector('.sm-name');
+    var mCount = box.querySelector('.sm-count');
+    var mStory = box.querySelector('.sm-story');
+    var mBody  = box.querySelector('.sm-body');
+    var index = 0, lastFocus = null;
+
+    function dataFor(el) {
+      var slug = el.getAttribute('data-slug');
+      var d = CREW[slug] || {};
+      return {
+        name: d.name || el.getAttribute('data-name') || '',
+        img: d.img || el.getAttribute('data-full'),
+        story: d.story || ''
+      };
+    }
 
     function show(i) {
       index = (i + portraits.length) % portraits.length;
-      var el = portraits[index];
-      lbImg.classList.remove('is-ready');
-      var full = el.getAttribute('data-full');
-      var name = el.getAttribute('data-name') || '';
-      var story = el.getAttribute('data-story') || '';
+      var d = dataFor(portraits[index]);
 
+      mImg.classList.remove('is-ready');
       var loader = new Image();
       loader.onload = function () {
-        lbImg.src = full;
-        lbImg.alt = name + ', a Cosmic Pet portrait';
-        lbImg.classList.add('is-ready');
+        mImg.src = d.img;
+        mImg.alt = d.name + ', a Cosmic Pet portrait';
+        mImg.classList.add('is-ready');
       };
-      loader.src = full;
+      loader.src = d.img;
 
-      lbTitle.textContent = name;
-      lbCount.textContent = (index + 1) + ' / ' + portraits.length;
-      lbFoot.textContent = story;
-      lbFoot.style.display = story ? '' : 'none';
+      mName.textContent = d.name;
+      mCount.textContent = (index + 1) + ' / ' + portraits.length;
+      mStory.innerHTML = d.story;
+      mBody.scrollTop = 0;
 
-      // warm the neighbours
-      [portraits[(index + 1) % portraits.length],
-       portraits[(index - 1 + portraits.length) % portraits.length]]
-        .forEach(function (n) { if (n) { new Image().src = n.getAttribute('data-full'); } });
+      // warm the neighbours so stepping through is instant
+      [1, -1].forEach(function (o) {
+        var n = dataFor(portraits[(index + o + portraits.length) % portraits.length]);
+        if (n.img) { new Image().src = n.img; }
+      });
     }
 
     function open(i) {
@@ -135,9 +148,8 @@
       box.classList.add('is-open');
       document.documentElement.classList.add('no-scroll');
       document.body.classList.add('no-scroll');
-      box.querySelector('.lb-close').focus();
+      box.querySelector('.sm-close').focus();
     }
-
     function close() {
       box.classList.remove('is-open');
       document.documentElement.classList.remove('no-scroll');
@@ -149,38 +161,39 @@
       el.addEventListener('click', function () { open(i); });
     });
 
-    box.querySelector('.lb-close').addEventListener('click', close);
-    box.querySelector('.lb-prev').addEventListener('click', function () { show(index - 1); });
-    box.querySelector('.lb-next').addEventListener('click', function () { show(index + 1); });
-
+    box.querySelector('.sm-close').addEventListener('click', close);
+    box.querySelector('.sm-prev').addEventListener('click', function () { show(index - 1); });
+    box.querySelector('.sm-next').addEventListener('click', function () { show(index + 1); });
     box.addEventListener('click', function (e) {
-      if (e.target === box || e.target.classList.contains('lightbox-stage')) { close(); }
+      if (e.target.hasAttribute('data-close')) { close(); }
     });
 
     document.addEventListener('keydown', function (e) {
       if (!box.classList.contains('is-open')) { return; }
       if (e.key === 'Escape') { close(); }
-      if (e.key === 'ArrowRight') { show(index + 1); }
-      if (e.key === 'ArrowLeft') { show(index - 1); }
-      if (e.key === 'Tab') {
-        var focusables = box.querySelectorAll('button');
-        var first = focusables[0];
-        var last = focusables[focusables.length - 1];
+      else if (e.key === 'ArrowRight') { show(index + 1); }
+      else if (e.key === 'ArrowLeft') { show(index - 1); }
+      else if (e.key === 'Tab') {
+        var f = box.querySelectorAll('button, a[href]');
+        var first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     });
 
-    // swipe
-    var startX = null;
-    box.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    // swipe (ignore gestures that start inside the scrolling story column)
+    var startX = null, startY = null;
+    box.addEventListener('touchstart', function (e) {
+      if (e.target.closest('.sm-body')) { startX = null; return; }
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    }, { passive: true });
     box.addEventListener('touchend', function (e) {
       if (startX === null) { return; }
       var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 45) { show(index + (dx < 0 ? 1 : -1)); }
+      var dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { show(index + (dx < 0 ? 1 : -1)); }
       startX = null;
     }, { passive: true });
-  }
   }
 
   /* ── preselect a package from ?package=… ─────────────────────────────── */
