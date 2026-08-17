@@ -389,6 +389,29 @@ p + p { margin-top: 1.05em; }
 }
 .hero-note strong { color: var(--ink); font-weight: 600; }
 
+/* Trust signals: the reassurances a buyer wants right at the decision point.
+   A centred, wrapping row of pink-ticked lines under the hero. */
+.hero-trust {
+  list-style: none;
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 11px 26px;
+  max-width: 660px; margin: 22px auto 0;
+}
+.hero-trust li {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 0.9rem; font-weight: 500; color: var(--ink);
+}
+.hero-trust li::before {
+  content: '✓'; flex: none;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--pink); color: oklch(100% 0 0);
+  display: grid; place-items: center; font-size: 0.66rem; font-weight: 700;
+}
+@media (max-width: 560px) {
+  .hero-trust { gap: 10px 20px; max-width: 300px; }
+  .hero-trust li { font-size: 0.86rem; }
+}
+
 /* ── hero carousel ─────────────────────────────────────────────────────────
    A seamless marquee. The track holds the portraits twice, and the animation
    moves it exactly -50%, so the moment it loops the second copy is sitting
