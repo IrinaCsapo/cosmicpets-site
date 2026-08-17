@@ -379,15 +379,8 @@ p + p { margin-top: 1.05em; }
     width: 100%; justify-content: center;
     padding: 15px 20px; font-size: 0.95rem; white-space: nowrap;
   }
-  .hero-note { margin-top: 20px; font-size: 0.84rem; }
   .marquee { margin-top: 30px; }
 }
-
-.hero-note {
-  display: inline-flex; align-items: center; gap: 9px;
-  margin-top: 28px; font-size: 0.9rem; color: var(--body);
-}
-.hero-note strong { color: var(--ink); font-weight: 600; }
 
 /* Trust signals: the reassurances a buyer wants right at the decision point.
    A centred, wrapping row of pink-ticked lines under the hero. */
