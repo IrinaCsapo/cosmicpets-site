@@ -397,7 +397,9 @@ p + p { margin-top: 1.05em; }
 .hero-trust li::before {
   content: '✓'; flex: none;
   width: 20px; height: 20px; border-radius: 50%;
-  background: var(--pink); color: oklch(100% 0 0);
+  /* green ticks, the same positive green as the photo-guide "yes" badges, so
+     the reassurances pop against the pink-heavy hero rather than blend in */
+  background: oklch(58% 0.15 150); color: oklch(100% 0 0);
   display: grid; place-items: center; font-size: 0.66rem; font-weight: 700;
 }
 @media (max-width: 560px) {
