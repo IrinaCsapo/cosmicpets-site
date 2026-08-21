@@ -662,7 +662,10 @@ p + p { margin-top: 1.05em; }
   border-radius: var(--radius); overflow: hidden; margin-bottom: 22px;
   background: var(--paper-tint);
 }
-.card-media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+/* A taller, squarer media block so the artwork reads much bigger; object-fit
+   cover zooms in and trims the surrounding context (the pink around the framed
+   print, the cutting mat) instead of showing it small. */
+.card-media img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
 
 /* ── steps ─────────────────────────────────────────────────────────────── */
 
