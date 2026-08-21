@@ -678,8 +678,10 @@ p + p { margin-top: 1.05em; }
 }
 .step h3 { color: var(--pink); margin-bottom: 10px; }
 .step img {
-  width: clamp(120px, 13vw, 156px); aspect-ratio: 1;
-  object-fit: contain; margin-bottom: 14px;
+  /* the source art is 800x800, so it can go much larger without softening.
+     Near-fills the column on desktop and stays generous on a phone. */
+  width: clamp(200px, 24vw, 300px); aspect-ratio: 1;
+  object-fit: contain; margin-bottom: 20px;
 }
 
 /* ── pricing ───────────────────────────────────────────────────────────── */
