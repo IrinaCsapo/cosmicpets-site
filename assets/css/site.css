@@ -1,0 +1,1018 @@
+/* ==========================================================================
+   Cosmic Pets, by Irina Csapo
+   Hand-built static site. No build step, no framework.
+   Colours are oklch throughout. Do not convert to hex/rgb.
+   ========================================================================== */
+
+/* ── fonts ─────────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: 'Aventi';
+  src: url('../fonts/Aventi-Bold.woff2') format('woff2'),
+       url('../fonts/Aventi-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── tokens ────────────────────────────────────────────────────────────── */
+
+:root {
+  /* brand, carried over from the Webflow original */
+  --ink:          oklch(18.1% 0.115 273.4);   /* deep navy, headings */
+  --ink-deep:     oklch(23.4% 0.153 270.4);
+  --body:         oklch(54.8% 0.056 288.2);   /* muted lilac-grey, body copy */
+  --pink:         oklch(66.2% 0.238 6.1);     /* the hot pink */
+  --pink-soft:    oklch(88% 0.075 6);
+  --pink-wash:    oklch(97% 0.022 6);
+  --indigo:       oklch(51.7% 0.272 274.8);
+  --lilac:        oklch(65.4% 0.202 291.8);
+  --lilac-soft:   oklch(81.7% 0.080 289.3);
+
+  --paper:        oklch(100% 0 0);
+  --paper-warm:   oklch(98.6% 0.006 300);
+  --paper-tint:   oklch(97.2% 0.012 292);
+  --line:         oklch(93.5% 0.012 288);
+
+  --display: 'Aventi', 'Asar', Georgia, serif;
+  --serif:   'Asar', Georgia, serif;
+  --sans:    'Albert Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --shell: 1240px;
+  --gutter: clamp(20px, 5vw, 64px);
+  --radius: 18px;
+  --radius-lg: 28px;
+
+  --shadow-sm: 0 2px 8px oklch(18% 0.06 280 / 0.06);
+  --shadow:    0 12px 34px oklch(18% 0.06 280 / 0.10);
+  --shadow-lg: 0 28px 70px oklch(18% 0.06 280 / 0.16);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
+
+a { color: inherit; }
+
+::selection { background: var(--pink-soft); color: var(--ink); }
+
+:focus-visible {
+  outline: 3px solid var(--pink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute; left: 12px; top: -100px; z-index: 999;
+  background: var(--ink); color: oklch(100% 0 0);
+  padding: 12px 20px; border-radius: 999px; font-size: 15px;
+  text-decoration: none; transition: top .2s var(--ease);
+}
+.skip-link:focus { top: 12px; }
+
+/* ── layout ────────────────────────────────────────────────────────────── */
+
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.shell-wide { max-width: 1480px; }
+.shell-narrow { max-width: 820px; }
+
+section { position: relative; }
+
+.band { padding-block: clamp(72px, 11vw, 140px); }
+.band-sm { padding-block: clamp(52px, 7vw, 88px); }
+.band-tint { background: var(--paper-tint); }
+.band-warm { background: var(--paper-warm); }
+.band-pink { background: var(--pink-wash); }
+
+/* ── type ──────────────────────────────────────────────────────────────── */
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(2.6rem, 6.4vw, 5rem); }
+h2 { font-size: clamp(2.1rem, 4.6vw, 3.5rem); }
+h3 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); line-height: 1.18; }
+h4 { font-size: 1.1rem; line-height: 1.3; }
+
+.pink { color: var(--pink); }
+.lilac { color: var(--lilac); }
+/* Emphasis inside a heading is colour only, never a second typeface. This used
+   to switch to Asar, which put two different serifs side by side in one line
+   and read as a mistake. Aventi throughout, pink does the work. */
+.serif-em { font-family: inherit; font-weight: inherit; letter-spacing: inherit; }
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 18px;
+}
+
+.lede {
+  font-size: clamp(1.05rem, 1.55vw, 1.25rem);
+  line-height: 1.66;
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+p + p { margin-top: 1.05em; }
+
+.center { text-align: center; }
+.center .lede { margin-inline: auto; }
+
+.rule {
+  width: 62px; height: 3px; border: 0; border-radius: 3px;
+  background: var(--pink); margin: 22px 0;
+}
+/* The divider follows the heading. Anywhere the text is centred, the rule
+   centres with it. .center is the explicit opt-in; .page-head and .hero-copy
+   centre via text-align without that class, so they are named here too, which
+   is the bug behind the off-centre dividers under the page titles. */
+.center .rule,
+.page-head .rule,
+.hero-copy .rule { margin-inline: auto; }
+
+/* ── buttons ───────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: var(--sans); font-size: 0.98rem; font-weight: 600;
+  line-height: 1; text-decoration: none; cursor: pointer;
+  padding: 17px 32px; border-radius: 999px; border: 2px solid transparent;
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease),
+              background-color .28s var(--ease), color .28s var(--ease),
+              border-color .28s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: var(--pink); color: oklch(100% 0 0);
+  box-shadow: 0 8px 22px oklch(66% 0.238 6 / 0.32);
+}
+.btn-primary:hover { box-shadow: 0 14px 32px oklch(66% 0.238 6 / 0.42); }
+
+.btn-ghost {
+  background: transparent; color: var(--ink); border-color: var(--line);
+}
+.btn-ghost:hover { border-color: var(--pink); color: var(--pink); }
+
+.btn-sm { padding: 12px 24px; font-size: 0.9rem; }
+
+.btn-row {
+  display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px;
+}
+/* Centre the buttons whether .center is an ancestor of the row or sits on the
+   row element itself (class="center btn-row"). The second selector was the gap:
+   text-align does not reach flex children, so those rows were left-packing. */
+.center .btn-row,
+.btn-row.center { justify-content: center; }
+
+.text-link {
+  color: var(--pink); text-decoration: none;
+  border-bottom: 1.5px solid oklch(66.2% 0.238 6.1 / 0.35);
+  padding-bottom: 1px; transition: border-color .25s var(--ease);
+}
+.text-link:hover { border-bottom-color: var(--pink); }
+
+/* ── nav ───────────────────────────────────────────────────────────────── */
+
+.nav {
+  position: sticky; top: 0; z-index: 200;
+  background: oklch(100% 0 0 / 0.86);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+.nav.is-stuck {
+  border-bottom-color: var(--line);
+  box-shadow: 0 4px 20px oklch(18% 0.06 280 / 0.05);
+}
+
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; padding-block: 15px;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 11px;
+  text-decoration: none; flex-shrink: 0;
+}
+/* The horizontal lockup already contains the words "Cosmic Pets", so the nav
+   carries no separate text. Height-constrained with width:auto, because the
+   artwork is 252x67 and forcing it square squashes the mark. */
+.brand img { height: clamp(30px, 2.6vw, 44px); width: auto; }
+
+.nav-links {
+  display: flex; align-items: center; gap: clamp(14px, 2vw, 30px);
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.95rem; font-weight: 500; color: var(--ink);
+  text-decoration: none; position: relative; padding-block: 6px;
+  transition: color .25s var(--ease);
+}
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 2px; background: var(--pink); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .3s var(--ease);
+}
+.nav-links a:hover { color: var(--pink); }
+.nav-links a:hover::after,
+.nav-links a[aria-current='page']::after { transform: scaleX(1); }
+.nav-links a[aria-current='page'] { color: var(--pink); }
+
+/* The Order Now button is a real CTA, not a nav link. The generic .nav-links a
+   rules above are more specific than .btn-primary and were overriding it: they
+   painted its label ink-dark and gave it the link underline and pink hover.
+   These rules, placed after them, hand it back to the button styling so it
+   reads as the same white-on-pink pill as every other CTA on the site. */
+.nav-links .nav-cta a {
+  color: oklch(100% 0 0);
+  padding: 12px 26px;         /* a touch fuller than btn-sm, closer to the CTAs */
+  font-size: 0.92rem; font-weight: 600;
+}
+.nav-links .nav-cta a:hover { color: oklch(100% 0 0); }
+.nav-links .nav-cta a::after { content: none; }
+
+.nav-toggle {
+  display: none; background: none; border: 0; cursor: pointer;
+  width: 44px; height: 44px; padding: 10px; color: var(--ink);
+}
+.nav-toggle span {
+  display: block; height: 2px; background: currentColor; border-radius: 2px;
+  transition: transform .3s var(--ease), opacity .2s var(--ease);
+}
+.nav-toggle span + span { margin-top: 6px; }
+.nav-toggle[aria-expanded='true'] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav-toggle[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded='true'] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+@media (max-width: 940px) {
+  .nav-toggle { display: block; }
+  .nav-cta { display: none; }
+  .nav-links {
+    position: fixed; inset: 68px 0 auto 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 8px var(--gutter) 28px;
+    box-shadow: var(--shadow);
+    transform: translateY(-8px); opacity: 0; pointer-events: none;
+    visibility: hidden;
+    transition: transform .3s var(--ease), opacity .25s var(--ease),
+                visibility 0s linear .3s;
+    max-height: calc(100dvh - 68px); overflow-y: auto;
+  }
+  .nav-links.is-open {
+    transform: translateY(0); opacity: 1; pointer-events: auto;
+    visibility: visible;
+    transition: transform .3s var(--ease), opacity .25s var(--ease), visibility 0s;
+  }
+  .nav-links a { display: block; padding: 15px 0; font-size: 1.05rem; border-bottom: 1px solid var(--line); }
+  .nav-links a::after { display: none; }
+  .nav-links li:last-child a {
+    border-bottom: 0; margin-top: 16px; text-align: center;
+    background: var(--pink); color: oklch(100% 0 0);
+    border-radius: 999px; padding: 15px 24px;
+  }
+}
+
+/* ── hero ──────────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative; overflow: hidden;
+  padding-block: clamp(48px, 7vw, 88px) 0;
+  background: var(--paper);
+}
+
+/* The watercolour leaves sit behind the type. The image is pale enough on its
+   own, but a paper-coloured veil over the middle keeps the headline readable
+   no matter how wide the viewport crops the artwork. */
+.hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background-image: url('../img/hero-bg-leaves.webp');
+  background-size: cover; background-position: 50% 22%;
+  background-repeat: no-repeat;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(58% 46% at 50% 34%, oklch(100% 0 0 / 0.86), transparent 72%),
+    linear-gradient(to bottom, transparent 55%, var(--paper-tint) 100%);
+}
+.hero > * { position: relative; z-index: 1; }
+
+.hero-copy { text-align: center; container-type: inline-size; }
+.hero-copy h1 {
+  margin-bottom: 20px;
+  /* Sized off the width of the copy column (cqi), not the raw viewport, so it
+     holds one confident line on any desktop width and does not balloon on an
+     ultrawide monitor where the column has stopped growing. As the screen
+     narrows the size follows the column down and the line reflows on its own;
+     the rem bounds stop it getting silly-big or too small. No max-width, that
+     is what was forcing the early two-line wrap. */
+  font-size: clamp(1.95rem, 7.9cqi, 3.6rem);
+  line-height: 1.04;
+}
+.hero-copy .lede { margin-inline: auto; max-width: 54ch; }
+
+/* text-align does not reach flex children, so the button row needs centring
+   in its own right. Without this it packs left inside centred copy. */
+.hero-copy .btn-row { justify-content: center; }
+
+/* On a phone the hero has to earn its height, otherwise the carousel, which is
+   the actual selling point, never appears above the fold. Tighter type, tighter
+   copy width, and buttons that sit on one line each. */
+@media (max-width: 560px) {
+  .hero { padding-block: 28px 0; }
+  /* On a phone one line will not fit, and should not: let it wrap to two or
+     three balanced lines rather than shrink to nothing. */
+  .hero-copy h1 { max-width: 15ch; margin-inline: auto; line-height: 1.02; }
+  .hero-copy .lede { font-size: 1rem; line-height: 1.55; max-width: 34ch; }
+  .hero-copy .btn-row { margin-top: 26px; gap: 10px; }
+  .hero-copy .btn {
+    width: 100%; justify-content: center;
+    padding: 15px 20px; font-size: 0.95rem; white-space: nowrap;
+  }
+  .marquee { margin-top: 30px; }
+}
+
+/* Trust signals: the reassurances a buyer wants right at the decision point.
+   A centred, wrapping row of pink-ticked lines under the hero. */
+.hero-trust {
+  list-style: none;
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 11px 26px;
+  max-width: 660px; margin: 22px auto 0;
+}
+.hero-trust li {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 0.9rem; font-weight: 500; color: var(--ink);
+}
+.hero-trust li::before {
+  content: '✓'; flex: none;
+  width: 20px; height: 20px; border-radius: 50%;
+  /* green ticks, the same positive green as the photo-guide "yes" badges, so
+     the reassurances pop against the pink-heavy hero rather than blend in */
+  background: oklch(58% 0.15 150); color: oklch(100% 0 0);
+  display: grid; place-items: center; font-size: 0.66rem; font-weight: 700;
+}
+@media (max-width: 560px) {
+  .hero-trust { gap: 10px 20px; max-width: 300px; }
+  .hero-trust li { font-size: 0.86rem; }
+}
+
+/* ── hero carousel ─────────────────────────────────────────────────────────
+   A seamless marquee. The track holds the portraits twice, and the animation
+   moves it exactly -50%, so the moment it loops the second copy is sitting
+   pixel-identical to where the first started. That is what stops the jump.
+   Any change to the number of portraits keeps working, because the distance
+   is a percentage of the track, not a pixel count.
+   ------------------------------------------------------------------------ */
+
+.marquee {
+  position: relative;
+  margin-top: clamp(44px, 6vw, 76px);
+  padding-block: 10px clamp(28px, 4vw, 44px);
+  overflow: hidden;
+  /* fade the strip out at both edges so it reads as continuous, not clipped */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+          mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.marquee-track {
+  display: flex; gap: clamp(14px, 1.6vw, 22px);
+  width: max-content;
+  animation: marquee 68s linear infinite;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track { animation-play-state: paused; }
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* .marquee-item is the flex slot. It carries NO transform of its own, so its
+   on-screen box stays a stable thing to measure. The visible card inside it is
+   what tilts. Keeping the two separate is what stops the curve from feeding
+   back into its own measurement and juddering. */
+.marquee-item {
+  flex: 0 0 auto;
+  width: clamp(148px, 17vw, 228px);
+  display: block;
+}
+.marquee-card {
+  display: block; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow .4s var(--ease);
+}
+.marquee-card img {
+  width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover; display: block;
+}
+
+/* ── the cinema curve ──────────────────────────────────────────────────────
+   Added by JS (is-3d) so it only ever applies when the script is there to
+   drive it. The perspective lives on the frame, and every ancestor down to the
+   card preserves 3D so the per-card rotateY actually renders in depth. JS sets
+   each card's rotateY / translateZ / scale from its live horizontal position,
+   which turns the flat scroll into a panorama that curves away at both edges. */
+.marquee.is-3d { perspective: 1500px; perspective-origin: 50% 44%; }
+.marquee.is-3d .marquee-track { transform-style: preserve-3d; }
+.marquee.is-3d .marquee-item { transform-style: preserve-3d; }
+.marquee.is-3d .marquee-card {
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  box-shadow: var(--shadow-lg);
+  will-change: transform, opacity;
+}
+.marquee-item:hover .marquee-card { box-shadow: var(--shadow-lg); }
+
+/* A moving strip is decoration. If the reader has asked for less motion, the
+   curve never activates (JS bails) and this turns it into a plain, flat,
+   scrollable row they drive themselves. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; scroll-snap-type: x mandatory; }
+  .marquee-track { animation: none; }
+  .marquee-item { scroll-snap-align: center; }
+}
+
+/* ── portrait grid ─────────────────────────────────────────────────────── */
+
+.portrait-grid {
+  display: grid; gap: clamp(14px, 1.8vw, 26px);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+}
+
+/* The home-page taster: fewer, larger portraits in a fixed four-up grid inside
+   the wide shell, so the cards read bigger than the gallery's auto-fill and
+   land as two clean rows of four. Steps down to two-up on tablets and phones. */
+.portrait-grid--feature {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 30px);
+}
+@media (max-width: 900px) {
+  .portrait-grid--feature { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.portrait {
+  position: relative; display: block; width: 100%;
+  border: 0; padding: 0; background: none; cursor: zoom-in;
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.portrait img {
+  width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover;
+  transition: transform .7s var(--ease);
+}
+.portrait:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+.portrait:hover img { transform: scale(1.035); }
+
+.portrait figcaption {
+  position: absolute; inset: auto 0 0 0;
+  padding: 44px 16px 14px; text-align: left;
+  font-family: var(--sans); font-size: 0.92rem; font-weight: 600;
+  color: oklch(100% 0 0);
+  background: linear-gradient(to top, oklch(18% 0.08 280 / 0.82), transparent);
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+}
+.portrait:hover figcaption,
+.portrait:focus-visible figcaption { opacity: 1; transform: translateY(0); }
+
+@media (hover: none) {
+  .portrait figcaption { opacity: 1; transform: none; }
+}
+
+/* ── portrait story modal ──────────────────────────────────────────────── */
+
+.story-modal {
+  position: fixed; inset: 0; z-index: 500;
+  display: grid; place-items: center;
+  padding: clamp(12px, 3vw, 40px);
+  opacity: 0; pointer-events: none; visibility: hidden;
+  transition: opacity .35s var(--ease), visibility 0s linear .35s;
+}
+.story-modal.is-open {
+  opacity: 1; pointer-events: auto; visibility: visible;
+  transition: opacity .35s var(--ease), visibility 0s;
+}
+.sm-backdrop {
+  position: fixed; inset: 0;
+  background: oklch(16% 0.05 280 / 0.94);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+
+.sm-card {
+  position: relative; z-index: 1;
+  display: flex; align-items: stretch;
+  width: min(1040px, 100%); max-height: min(88vh, 780px);
+  background: var(--paper); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  transform: translateY(14px) scale(0.985);
+  transition: transform .4s var(--ease);
+}
+.story-modal.is-open .sm-card { transform: none; }
+
+.sm-media {
+  flex: 0 0 auto; display: grid; place-items: center;
+  background: var(--paper-tint); max-width: 56%;
+  overflow: hidden; min-width: 0; min-height: 0;
+}
+.sm-media img {
+  display: block; height: 100%; width: auto; max-width: 100%;
+  object-fit: cover;
+  opacity: 0; transition: opacity .3s var(--ease);
+}
+.sm-media img.is-ready { opacity: 1; }
+
+.sm-body {
+  flex: 1 1 0; min-width: 0;
+  padding: clamp(26px, 3vw, 42px);
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.sm-eyebrow {
+  font-size: 0.74rem; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--pink); margin-bottom: 12px;
+}
+.sm-count { color: var(--body); margin-left: 4px; }
+.sm-name { font-size: clamp(1.7rem, 2.6vw, 2.4rem); }
+.sm-body .rule { margin: 16px 0 20px; }
+
+.sm-story { color: var(--body); }
+.sm-story p { font-size: 1rem; line-height: 1.68; }
+.sm-story p + p { margin-top: 1em; }
+.sm-story strong { color: var(--ink); font-weight: 600; }
+.sm-story ul { list-style: none; margin: 14px 0; display: grid; gap: 9px; }
+.sm-story li {
+  display: grid; grid-template-columns: 20px 1fr; gap: 8px;
+  font-size: 1rem; line-height: 1.5;
+}
+.sm-story li::before { content: '✦'; color: var(--pink); }
+
+.sm-cta { margin-top: 26px; }
+
+.sm-btn {
+  cursor: pointer; border-radius: 50%;
+  display: grid; place-items: center; line-height: 1;
+  transition: background-color .25s var(--ease), transform .25s var(--ease),
+              border-color .25s var(--ease), color .25s var(--ease);
+}
+.sm-close {
+  position: absolute; top: 12px; right: 12px; z-index: 3;
+  width: 40px; height: 40px; font-size: 1rem;
+  background: oklch(100% 0 0 / 0.8); border: 1px solid var(--line);
+  color: var(--ink);
+}
+.sm-close:hover { background: var(--pink); border-color: var(--pink); color: oklch(100% 0 0); }
+
+.sm-nav {
+  position: fixed; top: 50%; transform: translateY(-50%); z-index: 2;
+  width: 48px; height: 48px; font-size: 1.3rem;
+  background: oklch(100% 0 0 / 0.14); border: 1px solid oklch(100% 0 0 / 0.24);
+  color: oklch(100% 0 0);
+}
+.sm-nav:hover { background: oklch(100% 0 0 / 0.26); transform: translateY(-50%) scale(1.06); }
+.sm-prev { left: clamp(8px, 2vw, 26px); }
+.sm-next { right: clamp(8px, 2vw, 26px); }
+
+@media (max-width: 720px) {
+  .story-modal { padding: 0; place-items: stretch; }
+  .sm-card {
+    flex-direction: column; width: 100%;
+    max-height: 100dvh; height: 100dvh; border-radius: 0;
+  }
+  .sm-media { max-width: none; height: 42dvh; }
+  .sm-media img { width: 100%; height: 100%; object-fit: cover; }
+  .sm-body { flex: 1 1 auto; }
+  /* nav arrows tuck to the bottom corners so thumbs reach them */
+  .sm-nav { position: absolute; top: auto; bottom: 14px; transform: none; }
+  .sm-nav:hover { transform: scale(1.06); }
+  .sm-prev { left: 14px; } .sm-next { right: 14px; }
+}
+
+/* ── cards ─────────────────────────────────────────────────────────────── */
+
+.cards {
+  display: grid; gap: clamp(20px, 2.6vw, 34px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+
+.card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: clamp(26px, 3vw, 38px);
+  box-shadow: var(--shadow-sm);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease),
+              border-color .4s var(--ease);
+}
+.card:hover {
+  transform: translateY(-5px); box-shadow: var(--shadow);
+  border-color: var(--pink-soft);
+}
+.card h3 { margin-bottom: 12px; }
+.card p { font-size: 0.98rem; }
+
+.card-media {
+  border-radius: var(--radius); overflow: hidden; margin-bottom: 22px;
+  background: var(--paper-tint);
+}
+/* A taller, squarer media block so the artwork reads much bigger; object-fit
+   cover zooms in and trims the surrounding context (the pink around the framed
+   print, the cutting mat) instead of showing it small. */
+.card-media img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+
+/* ── steps ─────────────────────────────────────────────────────────────── */
+
+.steps {
+  display: grid; gap: clamp(24px, 3vw, 40px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  counter-reset: step;
+}
+.step { position: relative; padding-top: 8px; }
+.step-num {
+  font-family: var(--display); font-size: 2.4rem; color: var(--pink-soft);
+  line-height: 1; margin-bottom: 8px; display: block;
+}
+.step h3 { color: var(--pink); margin-bottom: 10px; }
+.step img {
+  /* the source art is 800x800, so it can go much larger without softening.
+     Near-fills the column on desktop and stays generous on a phone. */
+  width: clamp(200px, 24vw, 300px); aspect-ratio: 1;
+  object-fit: contain; margin-bottom: 20px;
+}
+
+/* ── pricing ───────────────────────────────────────────────────────────── */
+
+.tiers {
+  display: grid; gap: clamp(20px, 2.4vw, 30px); align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+}
+
+.tier {
+  display: flex; flex-direction: column; height: 100%;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: clamp(28px, 3vw, 40px);
+  box-shadow: var(--shadow-sm);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+}
+.tier:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+
+.tier-featured {
+  border-color: var(--pink); box-shadow: var(--shadow);
+  position: relative;
+}
+.tier-flag {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: var(--pink); color: oklch(100% 0 0);
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 7px 16px; border-radius: 999px;
+  white-space: nowrap;
+}
+
+.tier-art {
+  width: 116px; height: 116px; object-fit: contain; margin-bottom: 20px;
+}
+.tier > p { font-size: 0.98rem; }
+.tier > p.tier-price {
+  font-family: var(--display); font-size: clamp(2.6rem, 3.4vw, 3.2rem);
+  color: var(--ink); line-height: 1; margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.tier h3 { color: var(--pink); margin-bottom: 4px; }
+.tier > p.tier-role {
+  font-family: var(--serif); font-size: 1.02rem; color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.tier-list {
+  list-style: none; margin: 24px 0 28px; display: grid; gap: 11px;
+  padding-top: 22px; border-top: 1px solid var(--line);
+}
+.tier-list li {
+  display: grid; grid-template-columns: 22px 1fr; gap: 10px;
+  font-size: 0.96rem; align-items: start;
+}
+.tier-list li::before {
+  content: '✦'; color: var(--pink); font-size: 0.9rem; line-height: 1.6;
+}
+.tier .btn {
+  margin-top: auto; justify-content: center; text-align: center;
+  line-height: 1.3; padding-inline: 22px;
+}
+
+/* ── testimonials ──────────────────────────────────────────────────────── */
+
+.quotes {
+  display: grid; gap: clamp(18px, 2.2vw, 28px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+.quote {
+  background: var(--paper); border-radius: var(--radius-lg);
+  padding: clamp(26px, 3vw, 36px); box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line); position: relative;
+  display: flex; flex-direction: column;
+}
+.quote::before {
+  content: '“'; position: absolute; top: 6px; right: 24px;
+  font-family: var(--display); font-size: 4.5rem; line-height: 1;
+  color: var(--pink-soft);
+}
+.quote blockquote { font-size: 1rem; line-height: 1.62; margin-bottom: 20px; }
+.quote figcaption { margin-top: auto; }
+.quote cite {
+  display: block; font-style: normal; font-weight: 600;
+  color: var(--pink); font-size: 0.95rem;
+}
+.quote small { color: var(--body); font-size: 0.85rem; }
+
+/* ── faq ───────────────────────────────────────────────────────────────── */
+
+.faq-list { display: grid; gap: 12px; }
+
+.faq {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.faq[open] { border-color: var(--pink-soft); box-shadow: var(--shadow-sm); }
+
+.faq summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 21px clamp(18px, 2.4vw, 28px); cursor: pointer;
+  font-family: var(--sans); font-size: 1.03rem; font-weight: 600;
+  color: var(--ink); list-style: none;
+  transition: color .25s var(--ease);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { color: var(--pink); }
+.faq summary::after {
+  content: ''; flex-shrink: 0;
+  width: 12px; height: 12px; border-right: 2px solid var(--pink);
+  border-bottom: 2px solid var(--pink); transform: rotate(45deg) translate(-3px, -3px);
+  transition: transform .3s var(--ease);
+}
+.faq[open] summary::after { transform: rotate(225deg) translate(-3px, -3px); }
+.faq-body { padding: 0 clamp(18px, 2.4vw, 28px) 24px; }
+.faq-body p { font-size: 0.99rem; }
+
+/* ── split ─────────────────────────────────────────────────────────────── */
+
+.split {
+  display: grid; gap: clamp(32px, 5vw, 72px); align-items: center;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 860px) {
+  .split { grid-template-columns: 1fr 1fr; }
+  .split-reverse > *:first-child { order: 2; }
+}
+.split-media img {
+  width: 100%; border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+.split-media-plain img { box-shadow: none; border-radius: var(--radius-lg); }
+
+/* ── photo guide ───────────────────────────────────────────────────────── */
+
+.guide-pair {
+  display: grid; gap: clamp(24px, 3vw, 40px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+.guide-card {
+  border-radius: var(--radius-lg); overflow: hidden;
+  border: 2px solid var(--line); background: var(--paper);
+}
+.guide-card img { width: 100%; }
+.guide-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 18px clamp(18px, 2.4vw, 26px);
+  font-weight: 600; color: var(--ink);
+}
+.guide-yes { border-color: oklch(80% 0.14 150); }
+.guide-yes .guide-head { color: oklch(48% 0.14 150); }
+.guide-no { border-color: var(--pink-soft); }
+.guide-no .guide-head { color: var(--pink); }
+.guide-badge {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  display: grid; place-items: center; color: oklch(100% 0 0);
+  font-size: 0.8rem; font-weight: 700;
+}
+.guide-yes .guide-badge { background: oklch(58% 0.15 150); }
+.guide-no .guide-badge { background: var(--pink); }
+
+.checklist { list-style: none; display: grid; gap: 13px; margin-top: 26px; }
+.checklist li {
+  display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start;
+}
+.checklist li::before {
+  content: '✓'; color: oklch(100% 0 0); background: var(--pink);
+  width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 0.72rem; margin-top: 3px;
+}
+
+/* ── instagram strip ───────────────────────────────────────────────────── */
+
+.ig-strip {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(min(45%, 170px), 1fr));
+}
+.ig-strip img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  border-radius: 12px;
+  transition: transform .45s var(--ease), filter .45s var(--ease);
+}
+.ig-strip a:hover img { transform: scale(1.04); }
+
+/* ── form ──────────────────────────────────────────────────────────────── */
+
+.form { display: grid; gap: 18px; margin-top: 34px; }
+
+/* A grid child stretches to the whole column by default, which is why the
+   submit button ran the full width with its label shoved to the left. Let it
+   size to its own content and sit at the start of the row instead. The label
+   centres via the justify-content on .btn. */
+.form button[type="submit"] { justify-self: start; }
+@media (max-width: 560px) {
+  /* full width on a phone is the better tap target */
+  .form button[type="submit"] { justify-self: stretch; }
+}
+
+.field { display: grid; gap: 8px; }
+.field label {
+  font-size: 0.88rem; font-weight: 600; color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.field input, .field textarea, .field select {
+  font-family: var(--sans); font-size: 1rem; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 14px; padding: 15px 18px; width: 100%;
+  transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.field textarea { resize: vertical; min-height: 150px; line-height: 1.6; }
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none; border-color: var(--pink);
+  box-shadow: 0 0 0 4px oklch(66.2% 0.238 6.1 / 0.14);
+}
+.field-row {
+  display: grid; gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+.form-note { font-size: 0.86rem; color: var(--body); }
+.hp { position: absolute; left: -9999px; opacity: 0; }
+
+.form-status {
+  border-radius: 14px; padding: 16px 20px; font-size: 0.95rem;
+  display: none;
+}
+.form-status.is-visible { display: block; }
+.form-status.is-ok {
+  background: oklch(95% 0.05 150); color: oklch(40% 0.12 150);
+}
+.form-status.is-err {
+  background: var(--pink-wash); color: var(--pink);
+}
+
+/* ── cta band ──────────────────────────────────────────────────────────── */
+
+.cta-band {
+  background:
+    radial-gradient(90% 140% at 8% 50%, oklch(96% 0.04 6 / 0.95), transparent 60%),
+    radial-gradient(90% 140% at 95% 30%, oklch(95% 0.045 292 / 0.95), transparent 62%),
+    var(--paper-tint);
+  border-block: 1px solid var(--line);
+}
+
+/* ── footer ────────────────────────────────────────────────────────────── */
+
+.footer {
+  background: var(--ink); color: oklch(88% 0.02 290);
+  padding-block: clamp(56px, 7vw, 84px) 32px;
+}
+.footer h4 { color: oklch(100% 0 0); }
+.footer .brand { justify-content: center; margin-bottom: 22px; }
+/* The stacked lockup in its proper white-on-navy artwork (cosmic-pets-logo-
+   white.svg), with the pink accent dot kept. No CSS invert: that flattened
+   every colour to white, which is what turned the pink moon into a stray white
+   circle and the sparkle into a hole. */
+.footer .brand img {
+  width: clamp(96px, 12vw, 124px); height: auto;
+}
+
+.footer-top { text-align: center; max-width: 56ch; margin-inline: auto; }
+.footer-top p { color: oklch(80% 0.03 290); }
+.footer-top strong { color: oklch(100% 0 0); font-weight: 600; }
+
+.footer-nav {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 26px;
+  list-style: none; margin: 34px 0;
+}
+.footer-nav a {
+  text-decoration: none; font-size: 0.95rem; color: oklch(86% 0.025 290);
+  transition: color .25s var(--ease);
+}
+.footer-nav a:hover { color: var(--pink); }
+
+.footer-social {
+  display: flex; justify-content: center; gap: 14px; margin-bottom: 34px;
+}
+.footer-social a {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid oklch(100% 0 0 / 0.2);
+  display: grid; place-items: center;
+  transition: background-color .25s var(--ease), border-color .25s var(--ease);
+}
+.footer-social a:hover { background: var(--pink); border-color: var(--pink); }
+.footer-social img { width: 18px; }
+
+.footer-base {
+  border-top: 1px solid oklch(100% 0 0 / 0.12); padding-top: 26px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 26px;
+  font-size: 0.85rem; color: oklch(72% 0.03 290); text-align: center;
+}
+.footer-base a { color: oklch(84% 0.05 290); text-decoration: none; }
+.footer-base a:hover { color: var(--pink); }
+
+/* ── page header ───────────────────────────────────────────────────────── */
+
+.page-head + .band-sm { padding-top: 0; }
+
+.page-head {
+  padding-block: clamp(56px, 8vw, 100px) clamp(36px, 4vw, 52px);
+  background:
+    radial-gradient(100% 120% at 20% 0%, oklch(97.5% 0.025 6 / 0.9), transparent 62%),
+    radial-gradient(100% 120% at 88% 10%, oklch(97% 0.028 292 / 0.9), transparent 64%),
+    var(--paper);
+  text-align: center;
+}
+.page-head .lede { margin-inline: auto; }
+
+/* ── reveal ────────────────────────────────────────────────────────────── */
+
+/* Reveals only hide content once JS has confirmed it can un-hide it again.
+   Without the .js class (script blocked, failed, disabled) everything just
+   renders normally. */
+.js .reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.js .reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; transform: none; }
+}
+
+/* ── utilities ─────────────────────────────────────────────────────────── */
+
+.stack-lg > * + * { margin-top: clamp(48px, 6vw, 80px); }
+.mt-lg { margin-top: clamp(36px, 4.5vw, 60px); }
+.mt-md { margin-top: 28px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.no-scroll { overflow: hidden; }
