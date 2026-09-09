@@ -868,6 +868,36 @@ p + p { margin-top: 1.05em; }
 }
 .ig-strip a:hover img { transform: scale(1.04); }
 
+/* ── masonry (artwork / behind the scenes) ─────────────────────────────── */
+
+/* CSS columns give a Pinterest-style flow that copes with the mixed
+   portrait / landscape / square shots without cropping any of them. */
+.masonry {
+  column-count: 3;
+  column-gap: 18px;
+  margin-top: 8px;
+}
+@media (max-width: 900px) { .masonry { column-count: 2; column-gap: 14px; } }
+@media (max-width: 560px) { .masonry { column-count: 1; } }
+
+.masonry-item {
+  break-inside: avoid;
+  margin: 0 0 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--paper-tint);
+  box-shadow: 0 10px 30px oklch(20% 0.05 288 / 0.08);
+}
+@media (max-width: 900px) { .masonry-item { margin-bottom: 14px; } }
+
+.masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform .5s var(--ease);
+}
+.masonry-item:hover img { transform: scale(1.03); }
+
 /* ── form ──────────────────────────────────────────────────────────────── */
 
 .form { display: grid; gap: 18px; margin-top: 34px; }
