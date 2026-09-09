@@ -879,9 +879,12 @@ p + p { margin-top: 1.05em; }
 .mosaic {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: calc(100vw / 5);
+  /* row height matches the true column width (viewport minus the four 10px
+     gaps, divided by five) so tiles stay square even with the white gaps */
+  grid-auto-rows: calc((100vw - 40px) / 5);
   grid-auto-flow: dense;
-  gap: 0;
+  gap: 10px;
+  background: oklch(100% 0 0);
 }
 .mosaic-item { position: relative; overflow: hidden; }
 .mosaic-item img {
@@ -896,7 +899,7 @@ p + p { margin-top: 1.05em; }
 /* Kept at five columns so the four 2x2 feature tiles and nine singles pack
    into a clean 5x5 block with no trailing gaps. Phones drop to two columns. */
 @media (max-width: 560px) {
-  .mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: calc(100vw / 2); }
+  .mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: calc((100vw - 10px) / 2); }
   /* uniform squares on a phone, with the lead shot as a full-width banner */
   .mosaic-item.is-feature { grid-column: auto; grid-row: auto; }
   .mosaic-item.m-lead { grid-column: span 2; grid-row: auto; }
@@ -1029,6 +1032,8 @@ p + p { margin-top: 1.05em; }
    room and both paragraphs sit centred in a roomier reading column. */
 .page-head-wide { max-width: 1040px; }
 .page-head-wide .lede { max-width: 72ch; }
+/* The no-AI statement reads as a proud claim, so give it weight and ink. */
+.page-head-wide .ai-note { font-weight: 600; color: var(--ink); margin-top: 1.3em; }
 
 /* ── reveal ────────────────────────────────────────────────────────────── */
 
