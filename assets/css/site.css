@@ -875,6 +875,79 @@ p + p { margin-top: 1.05em; }
 }
 .ig-strip a:hover img { transform: scale(1.04); }
 
+/* ── instagram follow strip ───────────────────────────────────────────── */
+
+.ig-follow { padding-block: clamp(44px, 7vw, 88px); overflow: hidden; }
+.ig-follow .center { margin-bottom: clamp(24px, 4vw, 44px); }
+
+.ig-follow-strip {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+.ig-follow-strip img {
+  position: relative; z-index: 1;
+  width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
+}
+
+/* the big faded word sitting behind the row */
+.ig-follow-word {
+  position: absolute; z-index: 0;
+  left: 50%; top: -0.42em; transform: translateX(-50%);
+  font-family: var(--display); font-weight: 700; line-height: 1;
+  font-size: clamp(3.4rem, 13vw, 11rem);
+  color: var(--pink); opacity: 0.14;
+  white-space: nowrap; pointer-events: none;
+}
+
+/* central Instagram-branded tile */
+.ig-follow-tile {
+  position: relative; z-index: 2;
+  width: 100%; aspect-ratio: 1;
+  transform: scale(1.14);
+  border-radius: 16px;
+  background: linear-gradient(150deg,
+    oklch(80% 0.15 70) 0%,
+    oklch(70% 0.19 45) 28%,
+    oklch(62% 0.25 8) 62%,
+    oklch(57% 0.25 344) 100%);
+  box-shadow: 0 20px 44px oklch(45% 0.2 350 / 0.42);
+  display: grid; place-items: center; text-decoration: none;
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.ig-follow-tile:hover {
+  transform: scale(1.18);
+  box-shadow: 0 26px 54px oklch(45% 0.2 350 / 0.5);
+}
+/* white Instagram glyph watermark behind the handle */
+.ig-follow-tile::before {
+  content: ''; position: absolute; inset: 0; margin: auto;
+  width: 48%; aspect-ratio: 1;
+  background: oklch(100% 0 0); opacity: 0.28;
+  -webkit-mask: url(../img/icon-instagram.svg) center / contain no-repeat;
+          mask: url(../img/icon-instagram.svg) center / contain no-repeat;
+}
+.ig-follow-handle {
+  position: relative; z-index: 1;
+  color: oklch(100% 0 0); font-weight: 600;
+  font-size: clamp(0.8rem, 1.1vw, 1.05rem);
+  letter-spacing: 0.01em; text-align: center; padding: 0 10px;
+}
+
+@media (max-width: 900px) {
+  .ig-follow-strip { grid-template-columns: repeat(5, 1fr); }
+  .ig-follow-strip img:nth-of-type(1),
+  .ig-follow-strip img:nth-of-type(6) { display: none; }
+}
+@media (max-width: 560px) {
+  .ig-follow-strip { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .ig-follow-strip img:nth-of-type(2),
+  .ig-follow-strip img:nth-of-type(5) { display: none; }
+  .ig-follow-tile { transform: scale(1.08); }
+}
+
 /* ── mosaic (artwork / behind the scenes) ──────────────────────────────── */
 
 /* Full-bleed square-tile mosaic, matching the Webflow gallery: edge to edge,
