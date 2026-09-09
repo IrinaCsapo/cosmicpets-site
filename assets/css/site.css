@@ -114,6 +114,13 @@ section { position: relative; }
 .band { padding-block: clamp(72px, 11vw, 140px); }
 .band-sm { padding-block: clamp(52px, 7vw, 88px); }
 .band-tint { background: var(--paper-tint); }
+/* Soft pink palm-leaf background behind the testimonials, with a light wash so
+   the heading and the white quote cards stay legible over it. */
+.band-leaves {
+  background:
+    linear-gradient(oklch(99% 0.008 320 / 0.42), oklch(99% 0.008 320 / 0.42)),
+    url(../img/bg-leaves.webp) center / cover no-repeat;
+}
 .band-warm { background: var(--paper-warm); }
 .band-pink { background: var(--pink-wash); }
 
