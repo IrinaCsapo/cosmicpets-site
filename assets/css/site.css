@@ -21,7 +21,7 @@
   /* brand, carried over from the Webflow original */
   --ink:          oklch(18.1% 0.115 273.4);   /* deep navy, headings */
   --ink-deep:     oklch(23.4% 0.153 270.4);
-  --body:         oklch(44% 0.05 288.2);      /* body copy, darkened for legibility */
+  --body:         oklch(37% 0.052 288.2);     /* body copy, darkened for legibility */
   --pink:         oklch(66.2% 0.238 6.1);     /* the hot pink */
   --pink-soft:    oklch(88% 0.075 6);
   --pink-wash:    oklch(97% 0.022 6);
@@ -1024,6 +1024,11 @@ p + p { margin-top: 1.05em; }
   text-align: center;
 }
 .page-head .lede { margin-inline: auto; }
+
+/* Wider, fully centred intro (used on the Artwork page): the title gets more
+   room and both paragraphs sit centred in a roomier reading column. */
+.page-head-wide { max-width: 1040px; }
+.page-head-wide .lede { max-width: 72ch; }
 
 /* ── reveal ────────────────────────────────────────────────────────────── */
 
