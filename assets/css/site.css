@@ -21,7 +21,7 @@
   /* brand, carried over from the Webflow original */
   --ink:          oklch(18.1% 0.115 273.4);   /* deep navy, headings */
   --ink-deep:     oklch(23.4% 0.153 270.4);
-  --body:         oklch(54.8% 0.056 288.2);   /* muted lilac-grey, body copy */
+  --body:         oklch(44% 0.05 288.2);      /* body copy, darkened for legibility */
   --pink:         oklch(66.2% 0.238 6.1);     /* the hot pink */
   --pink-soft:    oklch(88% 0.075 6);
   --pink-wash:    oklch(97% 0.022 6);
@@ -70,7 +70,7 @@ body {
   background: var(--paper);
   color: var(--body);
   font-family: var(--sans);
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 400;
   line-height: 1.62;
   -webkit-font-smoothing: antialiased;
@@ -799,7 +799,7 @@ p + p { margin-top: 1.05em; }
 }
 .faq[open] summary::after { transform: rotate(225deg) translate(-3px, -3px); }
 .faq-body { padding: 0 clamp(18px, 2.4vw, 28px) 24px; }
-.faq-body p { font-size: 0.99rem; }
+.faq-body p { font-size: 1.13rem; }
 
 /* ── split ─────────────────────────────────────────────────────────────── */
 
