@@ -414,6 +414,12 @@ p + p { margin-top: 1.05em; }
   .hero-trust li { font-size: 0.86rem; }
 }
 
+/* CTAs + trust now sit under the carousel. Pull the buttons up close to the
+   cards (the carousel already carries its own bottom padding) and give the
+   block room to breathe before the next section. */
+.hero-actions { padding-bottom: clamp(44px, 6vw, 80px); }
+.hero-actions .btn-row { margin-top: clamp(10px, 2vw, 22px); }
+
 /* ── hero carousel ─────────────────────────────────────────────────────────
    A seamless marquee. The track holds the portraits twice, and the animation
    moves it exactly -50%, so the moment it loops the second copy is sitting
