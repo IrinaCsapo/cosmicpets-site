@@ -892,16 +892,6 @@ p + p { margin-top: 1.05em; }
   width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
 }
 
-/* the big faded word sitting behind the row */
-.ig-follow-word {
-  position: absolute; z-index: 0;
-  left: 50%; top: -0.42em; transform: translateX(-50%);
-  font-family: var(--display); font-weight: 700; line-height: 1;
-  font-size: clamp(3.4rem, 13vw, 11rem);
-  color: var(--pink); opacity: 0.14;
-  white-space: nowrap; pointer-events: none;
-}
-
 /* central Instagram-branded tile */
 .ig-follow-tile {
   position: relative; z-index: 2;
