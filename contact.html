@@ -110,6 +110,10 @@
           <input type="hidden" name="_subject" value="New Cosmic Pets enquiry">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_captcha" value="false">
+          <!-- Confirmation email sent straight back to whoever enquires, so they
+               know it arrived and what happens next. FormSubmit reads the field
+               named "email" as the recipient. -->
+          <input type="hidden" name="_autoresponse" value="Thank you so much for reaching out to Cosmic Pets. Your message has landed safely and I will get back to you as soon as I can, usually within a day or two. One quick thing: please reply to this email with a clear photo of your pet, so it reaches me at full quality. I cannot wait to hear all about them. With love, Irina at Cosmic Pets.">
           <label class="hp" aria-hidden="true">
             Leave this empty
             <input type="text" name="_honey" tabindex="-1" autocomplete="off">
@@ -210,6 +214,7 @@
   </div>
 </footer>
 
+<script src="assets/js/analytics.js" defer></script>
 <script src="assets/js/site.js" defer></script>
 </body>
 </html>
