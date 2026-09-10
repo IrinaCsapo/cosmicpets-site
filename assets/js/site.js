@@ -272,7 +272,7 @@
         form.reset();
         status.className = 'form-status is-visible is-ok';
         status.textContent = 'Thank you! Your message is on its way. ' +
-          'I will get back to you as soon as I can, usually within a day or two.';
+          'I will get back to you as soon as possible.';
       }).catch(function () {
         fallback('That did not send.');
       }).then(function () {
