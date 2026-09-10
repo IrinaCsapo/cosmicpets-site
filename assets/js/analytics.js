@@ -15,7 +15,7 @@
    Do NOT reuse the irina.love website ID here, or the two sites' stats mix.
    Until an ID is set this file does nothing, so it is safe to ship as-is. */
 (function () {
-  var WEBSITE_ID = ''; // <-- paste the Cosmic Pets Umami website ID here
+  var WEBSITE_ID = 'd95b999e-0cab-4202-890a-81ccd34edd9b';
   var SRC = 'https://irina-umami.vercel.app/script.js';
 
   if (!WEBSITE_ID) { return; } // dormant until an ID is set
