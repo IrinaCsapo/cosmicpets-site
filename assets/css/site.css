@@ -433,9 +433,18 @@ p + p { margin-top: 1.05em; }
   margin-top: clamp(10px, 1.6vw, 22px);
   padding-block: 10px clamp(28px, 4vw, 44px);
   overflow: hidden;
-  /* fade the strip out at both edges so it reads as continuous, not clipped */
-  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
-          mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  /* Fade the strip at both side edges so it reads as continuous, and fade the
+     bottom too: the cards' large soft shadow was hard-clipped at the container
+     edge, leaving a visible shadow line above the CTA. The bottom fade softens
+     that clip away. Two mask layers, intersected. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, black 6%, black 94%, transparent),
+    linear-gradient(to bottom, black 86%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, black 6%, black 94%, transparent),
+    linear-gradient(to bottom, black 86%, transparent);
+  mask-composite: intersect;
 }
 
 .marquee-track {
