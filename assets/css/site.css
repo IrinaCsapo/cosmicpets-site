@@ -386,7 +386,7 @@ p + p { margin-top: 1.05em; }
     width: 100%; justify-content: center;
     padding: 15px 20px; font-size: 0.95rem; white-space: nowrap;
   }
-  .marquee { margin-top: 30px; }
+  .marquee { margin-top: 12px; }
 }
 
 /* Trust signals: the reassurances a buyer wants right at the decision point.
@@ -430,7 +430,7 @@ p + p { margin-top: 1.05em; }
 
 .marquee {
   position: relative;
-  margin-top: clamp(44px, 6vw, 76px);
+  margin-top: clamp(10px, 1.6vw, 22px);
   padding-block: 10px clamp(28px, 4vw, 44px);
   overflow: hidden;
   /* fade the strip out at both edges so it reads as continuous, not clipped */
