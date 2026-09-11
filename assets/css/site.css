@@ -1043,9 +1043,10 @@ p + p { margin-top: 1.05em; }
 
 .cta-band {
   background:
-    radial-gradient(90% 140% at 8% 50%, oklch(96% 0.04 6 / 0.95), transparent 60%),
-    radial-gradient(90% 140% at 95% 30%, oklch(95% 0.045 292 / 0.95), transparent 62%),
-    var(--paper-tint);
+    radial-gradient(90% 140% at 8% 50%, oklch(96% 0.04 6 / 0.75), transparent 60%),
+    radial-gradient(90% 140% at 95% 30%, oklch(95% 0.045 292 / 0.75), transparent 62%),
+    linear-gradient(oklch(99% 0.01 320 / 0.5), oklch(99% 0.01 320 / 0.5)),
+    url(../img/bg-leaves.webp) center / cover no-repeat;
   border-block: 1px solid var(--line);
 }
 
