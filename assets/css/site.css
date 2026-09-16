@@ -469,19 +469,22 @@ p + p { margin-top: 1.05em; }
   width: clamp(148px, 17vw, 228px);
   display: block;
 }
-/* Each card is a real picture frame: a black outer frame (border) with a
-   white mount/mat (padding) around the portrait. */
+/* Each card is a real picture frame: a square black frame (border) with a
+   wide white mount/mat (padding), and the print recessed behind the mat. */
 .marquee-card {
-  display: block; border-radius: 7px; overflow: hidden;
+  display: block; border-radius: 0; overflow: hidden;
   box-shadow: var(--shadow);
   background: oklch(100% 0 0);
-  border: 4px solid oklch(17% 0.02 285);
-  padding: 9px;
+  border: 5px solid oklch(15% 0.015 285);
+  padding: 13px;
   transition: box-shadow .4s var(--ease);
 }
 .marquee-card img {
   width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover; display: block;
-  border-radius: 2px;
+  border-radius: 0;
+  /* hairline edge + soft top-inner shadow so the print reads as recessed
+     behind the mount opening */
+  box-shadow: 0 0 0 1px oklch(0% 0 0 / 0.07), inset 0 2px 7px oklch(0% 0 0 / 0.17);
 }
 
 /* ── the cinema curve ──────────────────────────────────────────────────────
