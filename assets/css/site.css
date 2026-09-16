@@ -531,11 +531,10 @@ p + p { margin-top: 1.05em; }
   .portrait-grid--feature { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* Framed like the carousel: square black frame (border) with a white mount
-   (padding) and the print recessed behind the mat. */
+/* A white mount (padding) around a recessed print, no outer frame. */
 .portrait {
   position: relative; display: block; width: 100%;
-  border: 5px solid oklch(15% 0.015 285); padding: 13px;
+  border: 0; padding: 13px;
   background: oklch(100% 0 0); cursor: zoom-in;
   border-radius: 0; overflow: hidden;
   box-shadow: var(--shadow-sm);
