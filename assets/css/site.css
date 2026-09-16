@@ -531,22 +531,25 @@ p + p { margin-top: 1.05em; }
   .portrait-grid--feature { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+/* Framed like the carousel: square black frame (border) with a white mount
+   (padding) and the print recessed behind the mat. */
 .portrait {
   position: relative; display: block; width: 100%;
-  border: 0; padding: 0; background: none; cursor: zoom-in;
-  border-radius: var(--radius); overflow: hidden;
+  border: 5px solid oklch(15% 0.015 285); padding: 13px;
+  background: oklch(100% 0 0); cursor: zoom-in;
+  border-radius: 0; overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: transform .45s var(--ease), box-shadow .45s var(--ease);
 }
 .portrait img {
-  width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover;
-  transition: transform .7s var(--ease);
+  width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover; display: block;
+  box-shadow: 0 0 0 1px oklch(0% 0 0 / 0.07), inset 0 2px 7px oklch(0% 0 0 / 0.17);
 }
 .portrait:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
-.portrait:hover img { transform: scale(1.035); }
 
 .portrait figcaption {
-  position: absolute; inset: auto 0 0 0;
+  /* sit over the print itself, inside the mount (matches the 13px padding) */
+  position: absolute; inset: auto 13px 13px 13px;
   padding: 44px 16px 14px; text-align: left;
   font-family: var(--sans); font-size: 0.92rem; font-weight: 600;
   color: oklch(100% 0 0);
