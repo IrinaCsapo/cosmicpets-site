@@ -465,6 +465,7 @@ p + p { margin-top: 1.05em; }
 }
 .fanslot { flex: 0 0 auto; margin-inline: clamp(3px, 0.5vw, 10px); }
 .fancard {
+  position: relative;
   width: clamp(120px, 12vw, 172px);
   background: oklch(100% 0 0);
   padding: 8px 8px 28px;
@@ -485,9 +486,9 @@ p + p { margin-top: 1.05em; }
 }
 
 .fan-chip {
-  position: absolute; z-index: 8;
+  position: absolute; z-index: 8; white-space: nowrap;
   display: inline-flex; align-items: center; gap: 7px;
-  background: oklch(100% 0 0 / 0.92);
+  background: oklch(100% 0 0 / 0.95);
   border: 1px solid var(--line); border-radius: 999px;
   padding: 8px 15px; font-size: 0.85rem; font-weight: 600; color: var(--ink);
   box-shadow: 0 8px 22px oklch(18% 0.06 280 / 0.16);
@@ -495,21 +496,16 @@ p + p { margin-top: 1.05em; }
 .fan-chip::before {
   content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--pink);
 }
-.fan-chip--1 { left: 14%; top: 38%; }
-.fan-chip--2 { left: 40%; top: 62%; }
-.fan-chip--3 { right: 14%; top: 38%; }
-.fan-chip--4 { left: 50%; top: 16%; transform: translateX(-50%); }
+/* pinned to the card so each tag travels through the arc with its portrait */
+.fan-chip.is-top    { top: -13px; left: 50%; transform: translateX(-50%); }
+.fan-chip.is-bottom { bottom: 42px; left: 50%; transform: translateX(-50%); }
 
 @media (prefers-reduced-motion: reduce) {
   .fanrail { animation: none; transform: translateX(-50%); }
 }
 @media (max-width: 620px) {
   .fancard { width: clamp(120px, 34vw, 150px); }
-  .fan-chip { font-size: 0.78rem; padding: 6px 12px; }
-  /* two chips is plenty on a narrow screen */
-  .fan-chip--2, .fan-chip--3 { display: none; }
-  .fan-chip--1 { left: 4%; top: 46%; }
-  .fan-chip--4 { left: auto; right: 4%; top: 30%; transform: none; }
+  .fan-chip { font-size: 0.76rem; padding: 6px 12px; }
 }
 
 /* ── hero carousel ─────────────────────────────────────────────────────────
