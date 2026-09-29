@@ -456,14 +456,14 @@ p + p { margin-top: 1.05em; }
 .fanwrap { position: relative; overflow: hidden; padding: 30px 0 40px; }
 .fanrail {
   display: flex; width: max-content; align-items: flex-start;
-  animation: fanmove 64s linear infinite;
+  animation: fanmove 95s linear infinite;
 }
 .fanwrap:hover .fanrail { animation-play-state: paused; }
 @keyframes fanmove {           /* travels left to right */
   from { transform: translateX(-50%); }
   to   { transform: translateX(0); }
 }
-.fanslot { flex: 0 0 auto; margin-inline: clamp(-30px, -2vw, -18px); }
+.fanslot { flex: 0 0 auto; margin-inline: clamp(3px, 0.5vw, 10px); }
 .fancard {
   width: clamp(120px, 12vw, 172px);
   background: oklch(100% 0 0);
