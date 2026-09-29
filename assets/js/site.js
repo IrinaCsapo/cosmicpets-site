@@ -351,6 +351,59 @@
     }
   })();
 
+  /* ── hero fan: curve the moving polaroids into an arc ─────────────────────
+     The rail scrolls horizontally via CSS. Each frame this reads where every
+     card sits and writes a rotate + lift + scale from its distance to centre,
+     so cards flow through a fixed arc: upright and raised in the middle,
+     tilted and dropped toward the edges. Off under reduced motion. */
+  (function () {
+    var reducedFan = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedFan) { return; }
+    var wrap = document.querySelector('.fanwrap');
+    if (!wrap) { return; }
+    var cards = Array.prototype.map.call(
+      wrap.querySelectorAll('.fanslot'),
+      function (el) { return { el: el, card: el.querySelector('.fancard') }; }
+    ).filter(function (c) { return c.card; });
+    if (!cards.length) { return; }
+
+    var MAX_ROT = 12;   // degrees of tilt at the edge
+    var DROP    = 66;   // px an edge card sinks below centre
+    var RISE    = 10;   // px the centre card lifts
+    var MIN_SC  = 0.9;  // how small an edge card shrinks to
+    var SPREAD  = 1.06; // >1 widens the curve
+
+    var raf = 0, running = false;
+    function frame() {
+      var r = wrap.getBoundingClientRect();
+      var mid = r.left + r.width / 2;
+      var half = (r.width / 2) * SPREAD || 1;
+      for (var i = 0; i < cards.length; i++) {
+        var b = cards[i].el.getBoundingClientRect();
+        var d = ((b.left + b.width / 2) - mid) / half;
+        var cl = d < -1 ? -1 : d > 1 ? 1 : d;
+        var ad = cl < 0 ? -cl : cl;
+        var st = cards[i].card.style;
+        st.transform =
+          'translateY(' + (-RISE + cl * cl * DROP).toFixed(1) + 'px) ' +
+          'rotate(' + (cl * MAX_ROT).toFixed(2) + 'deg) ' +
+          'scale(' + (1 - (1 - MIN_SC) * ad).toFixed(3) + ')';
+        st.zIndex = String(1000 - Math.round(ad * 1000));
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function start() { if (!running) { running = true; raf = requestAnimationFrame(frame); } }
+    function stop() { if (running) { running = false; cancelAnimationFrame(raf); } }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        if (entries[entries.length - 1].isIntersecting) { start(); } else { stop(); }
+      }, { threshold: 0 }).observe(wrap);
+    } else {
+      start();
+    }
+  })();
+
   /* ── current year ────────────────────────────────────────────────────── */
 
   var year = document.querySelector('[data-year]');
