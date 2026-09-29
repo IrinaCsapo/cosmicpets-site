@@ -333,7 +333,7 @@ p + p { margin-top: 1.05em; }
 
 .hero {
   position: relative; overflow: hidden;
-  padding-block: clamp(48px, 7vw, 88px) 0;
+  padding-block: clamp(14px, 2.4vw, 34px) 0;
   background: var(--paper);
 }
 
@@ -376,7 +376,7 @@ p + p { margin-top: 1.05em; }
    the actual selling point, never appears above the fold. Tighter type, tighter
    copy width, and buttons that sit on one line each. */
 @media (max-width: 560px) {
-  .hero { padding-block: 28px 0; }
+  .hero { padding-block: 12px 0; }
   /* On a phone one line will not fit, and should not: let it wrap to two or
      three balanced lines rather than shrink to nothing. */
   .hero-copy h1 { max-width: 15ch; margin-inline: auto; line-height: 1.02; }
