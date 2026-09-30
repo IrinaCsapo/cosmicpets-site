@@ -467,17 +467,16 @@ p + p { margin-top: 1.05em; }
 .fancard {
   position: relative;
   width: clamp(120px, 12vw, 172px);
-  background: oklch(100% 0 0);
-  padding: 8px 8px 28px;
-  border-radius: 6px;
-  box-shadow: 0 18px 34px oklch(18% 0.06 280 / 0.17);
   transform-origin: bottom center;
   transform: translateY(6px);   /* gentle resting state before JS curves it */
   will-change: transform;
 }
 .fancard img {
   width: 100%; aspect-ratio: 1080 / 1518; object-fit: cover; display: block;
-  border-radius: 2px;
+  border-radius: 8px;
+  /* small, contained shadow so cards lift off the page without the drop
+     bleeding down into the next section */
+  box-shadow: 0 6px 16px oklch(18% 0.06 280 / 0.13);
 }
 .fan-name {
   font-family: 'Caveat', var(--serif), cursive;
@@ -498,7 +497,7 @@ p + p { margin-top: 1.05em; }
 }
 /* pinned to the card so each tag travels through the arc with its portrait */
 .fan-chip.is-top    { top: -13px; left: 50%; transform: translateX(-50%); }
-.fan-chip.is-bottom { bottom: 42px; left: 50%; transform: translateX(-50%); }
+.fan-chip.is-bottom { bottom: 30px; left: 50%; transform: translateX(-50%); }
 
 @media (prefers-reduced-motion: reduce) {
   .fanrail { animation: none; transform: translateX(-50%); }
